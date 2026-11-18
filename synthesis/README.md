@@ -4,7 +4,7 @@ Cada diretório `rtl/conv*` é o dono das suas configurações de síntese. A
 estrutura de uma configuração é:
 
 ```text
-rtl/conv3x3stream-if/synthesis/ifn9-12mac/
+contrib/rtl/conv3x3stream-if/synthesis/ifn9-12mac/
 ├── list-file.txt
 ├── list-define.txt
 ├── top-module.txt
@@ -43,11 +43,11 @@ o testbench são declarados, respectivamente, em `top-module.txt` e
 
 ```bash
 # Uma configuração específica
-cd rtl/conv3x3stream-if/synthesis/ifn9-12mac/logical
+cd contrib/rtl/conv3x3stream-if/synthesis/ifn9-12mac/logical
 bash ./run.sh
 
 # Todas as etapas de uma configuração
-cd rtl/conv3x3stream-if/synthesis/ifn9-12mac
+cd contrib/rtl/conv3x3stream-if/synthesis/ifn9-12mac
 bash ./logical/run.sh
 bash ./sim/run.sh
 bash ./power/run.sh
@@ -55,7 +55,7 @@ bash ./power/run.sh
 # O índice opcional da raiz percorre todas as configurações sob rtl/conv*
 cd synthesis
 bash ./run.sh -logical
-bash ./run.sh rtl/conv3x3stream-tc/synthesis/tcn9-05mac
+bash ./run.sh contrib/rtl/conv3x3stream-tc/synthesis/tcn9-05mac
 ```
 
 Os resultados do Genus continuam em `logical/results/`, com o netlist mapeado,

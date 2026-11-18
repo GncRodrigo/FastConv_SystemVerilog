@@ -1,5 +1,8 @@
 # Renaming Log - `rtl/control`
 
+> The `rtl/control` block became `rtl/conv-3` and then this directory, `rtl/conv3x3/` (commit `79164f12`); the
+> control logic now lives inside the `Conv` module. Paths below refer to the original location.
+
 This document records the naming migration applied to the `rtl/control` block to align it with the project conventions used by other control modules.
 
 ## 1. File and Module

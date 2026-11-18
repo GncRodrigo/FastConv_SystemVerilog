@@ -218,12 +218,11 @@ The row-level unit test is `streaming_row_testbench.sv`.
 
 ## Synthesis configurations
 
-The active synthesis tree is restricted to the 16-bit column configurations:
-
-- `synthesis/conv-i24-h13-t08-o4-m04-stream08-prefetch8-rowconst4-trunc-column-nbits16/`
-- `synthesis/conv-i24-h13-t08-o4-m08-stream08-prefetch8-rowconst4-trunc-column-nbits16/`
-
-Other synthesis and power results are preserved under `archive/synthesis/`.
+The active synthesis tree (`synthesis/`) holds the 16-bit column configurations with the
+Cin = 3, Cout = 12 workload (`*-cin3-cout12`) and the TCN4 rounding/precision campaigns
+(`conv-tcn4-*`). The original single-workload 16-bit configurations
+(`archive/synthesis/conv-i24-h13-t08-o4-m0{4,8}-stream08-prefetch8-rowconst4-trunc-column-nbits16/`)
+and the other synthesis and power results are preserved under `archive/synthesis/`.
 Older configurations already organized by MAC count remain under
 `archive/m04/synthesis/` and `archive/m08/synthesis/`. This keeps historical
 20-bit results available without mixing them into the current 16-bit campaign.

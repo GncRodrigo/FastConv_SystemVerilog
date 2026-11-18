@@ -1,6 +1,6 @@
 # ASIC workload: Cin=3, Cout=12
 
-Source configuration: `rtl/conv3x3/synthesis/conv-ifn9-i40-h27-t36-o9-m18-stream12-prefetch15-rowconst6-trunc-column-nbits16`.
+Source configuration: `rtl/conv3x3/archive/synthesis/conv-ifn9-i40-h27-t36-o9-m18-stream12-prefetch15-rowconst6-trunc-column-nbits16`.
 
 Workload package: `rtl/conv3x3/data/ifn9/sim/sim-032-3-12-normal-trunc-nbits16/pack_data.sv`.
 
