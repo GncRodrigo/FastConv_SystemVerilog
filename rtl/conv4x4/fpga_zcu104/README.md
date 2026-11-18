@@ -50,6 +50,38 @@ The full flow passed on 2026-11-18 (commit `4d76f4fa`): 5,884 LUT, 2,049 FF,
 0.458 W P3F typical dynamic power; see
 [results/trn16-nbits16-cin3-cout12-4d76f4fa.md](results/trn16-nbits16-cin3-cout12-4d76f4fa.md).
 
+### Using TRN16 in your own Vivado project (e.g. a Kria board)
+
+The core needs only the three sources of `manifests/trn16.rtl` (no package
+import): `rtl/conv4x4/mult-matrices/trn16/mult_matrices.sv`,
+`rtl/multip/multip.sv`, and the core
+`rtl/conv4x4/conv-trn16-i60-h17-t16-o16-m08-stream16-prefetch24-rowconst8-round-column.sv`.
+Top module `Conv`, generics `NBITS=16 N_CHANNEL_OUT=12 NADDR=14` (the other
+defaults already match: `N_CHANNEL_IN=3`, `NUM_MULT=8`, `ROUND=1`,
+`WEIGHT_FRAC_BITS=0`, `EXTRA_FRAC_BITS=0`).
+
+- **Interface:** `p_start`/`p_end`, one read port to the input memory (one
+  6-word column per beat) and one read/write port to the output memory (one
+  4-word column per beat). There is no AXI and no separate controller: the
+  control is inside `Conv`. Memory layout and timing are those of
+  `tb/tb_power_stream_column.sv` in `rtl/stream-column/fpga_zcu104/`, which is
+  the reference for a BRAM wrapper.
+- **I/O:** as a bare top the core uses 261 user I/O (`reports/trn16-4d76f4fa/trn16/io.rpt`).
+  That fits the ZCU104 but may exceed the user I/O of a smaller device such as
+  the Kria K26 SOM; check its datasheet. On such a device, put the memories
+  next to the core in a wrapper (the real integration) or synthesize the core
+  out of context (`synth_design -mode out_of_context`) to look at area and
+  timing.
+- **Simulation:** the self-checking testbench is
+  `rtl/stream-column/fpga_zcu104/tb/tb_power_stream_column.sv` with
+  `rtl/conv4x4/pack-param/trn16/pack_param.sv`, the `pack_data.sv` of the
+  dataset above, and `rtl/mem/mem.sv`, defining `STREAM_COLUMN_NBITS=16`. It
+  prints `STREAM_COLUMN_POWER_PASS ... mismatches=0` on success. Only Xcelium
+  was used here; Verilator 5 rejects the long lines of `pack_data.sv`, and
+  Vivado's simulator was not tried.
+- **Reference numbers** on the ZCU104 at 317 MHz are in
+  [results/trn16-nbits16-cin3-cout12-4d76f4fa.md](results/trn16-nbits16-cin3-cout12-4d76f4fa.md).
+
 To add another current core, copy `manifests/trn16.rtl`, replace the RTL line
 by the core of its ASIC configuration (`rtl/conv4x4/synthesis/<config>/list-file.txt`,
 without `pack_data.sv`, which is only the simulation workload; `pack_param.sv` and

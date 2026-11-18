@@ -136,7 +136,13 @@ Rode tudo na raiz do repositório, dentro do tmux.
   com `rtl/stream-column/fpga_zcu104/scripts/check_rtl.sh rtl/conv4x4/fpga_zcu104 trn16 4` (Xcelium; tem que dar
   `mismatches=0`). O fluxo completo (Vivado 2023.2 no Paxos) é `rtl/conv4x4/fpga_zcu104/scripts/run_campaign.sh <saída>
   trn16`; para outra placa Zynq UltraScale+, como a Kria K26, defina `STREAM_COLUMN_FPGA_PART=xck26-sfvc784-2LV-c`. As
-  constraints só definem o relógio de 317 MHz, então não dependem da placa.
+  constraints só definem o relógio de 317 MHz, então não dependem da placa. Referência na ZCU104 (2026-11-18): 5.884 LUTs,
+  2.049 FFs, 8 DSPs, folga de +0,095 ns a 317 MHz, golden pós-roteamento sem divergências, 0,458 W de potência dinâmica
+  (`rtl/conv4x4/fpga_zcu104/results/trn16-nbits16-cin3-cout12-4d76f4fa.md`).
+- **Usar o trn16 num projeto Vivado próprio (Kria):** bastam três fontes, topo `Conv` e generics `NBITS=16
+  N_CHANNEL_OUT=12 NADDR=14`; a lista, a interface de memória e a testbench estão em "Using TRN16 in your own Vivado
+  project" no README de `rtl/conv4x4/fpga_zcu104/`. Atenção: sozinho como topo, o núcleo usa 261 pinos de I/O, o que pode
+  passar do que a Kria tem; lá ele precisa das memórias num wrapper (ou de síntese out-of-context só para área e timing).
 
 ## 7. Como registrar um experimento
 

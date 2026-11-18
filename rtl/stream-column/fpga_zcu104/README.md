@@ -73,7 +73,27 @@ zero mismatches).
 
 ## Paxos execution
 
-First publish the exact source commit and verify it on the Paxos. Then load
+First publish the exact source commit and verify it on the Paxos. The Paxos
+clone cannot fetch from GitHub; push the commit from the working machine to a
+branch of that clone and run from a separate worktree, leaving its main
+checkout alone (this is how the 2026-11-18 TRN16 run was done):
+
+```bash
+git push ssh://<user>@paxos.inf.pucrs.br/sim/<user>/fast-conv/submodules/FastConv_SystemVerilog \
+  HEAD:refs/heads/fpga-<variant>-<commit>
+# on the Paxos:
+git -C /sim/<user>/fast-conv/submodules/FastConv_SystemVerilog worktree add \
+  /sim/<user>/fpga-<variant>-<commit> fpga-<variant>-<commit>
+```
+
+The SAIF captures stop at 195 us of simulated time (`capture_*_saif.tcl`, raised
+from 90 us for the Cin3/Cout12 workloads); a longer workload needs a larger value
+there and in the testbench watchdog (200 us). Collect the tables of a finished
+campaign with `scripts/collect_campaign.py <output-root> <variant>...` and copy
+only the text reports (`*.rpt`, `*.log`, `*.jou`, `*.txt`, `checksums.sha256`)
+to `rtl/conv*/fpga_zcu104/reports/<campaign>/`.
+
+Then load
 Vivado 2023.2 and Xcelium 23.03 and run the campaign in a persistent tmux
 session, directing artifacts outside Git:
 
