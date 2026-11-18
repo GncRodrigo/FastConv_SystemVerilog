@@ -45,7 +45,10 @@ environment overrides are needed:
    the 317 MHz clock (`constraints/zcu104_317mhz.xdc`), so they are board
    independent; change the period there if the target clock differs.
 
-No Vivado result exists for `trn16` yet; the numbers above are RTL simulation.
+The full flow passed on 2026-11-18 (commit `4d76f4fa`): 5,884 LUT, 2,049 FF,
+8 DSP, WNS `+0.095 ns` at 317 MHz, post-route golden with zero mismatches, and
+0.458 W P3F typical dynamic power; see
+[results/trn16-nbits16-cin3-cout12-4d76f4fa.md](results/trn16-nbits16-cin3-cout12-4d76f4fa.md).
 
 To add another current core, copy `manifests/trn16.rtl`, replace the RTL line
 by the core of its ASIC configuration (`rtl/conv4x4/synthesis/<config>/list-file.txt`,

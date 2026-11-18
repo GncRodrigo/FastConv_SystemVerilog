@@ -1,5 +1,10 @@
 # Conv4x4 FPGA results
 
+The current TRN16 core (8 MACs, 16 bits, Cin3/Cout12 round workload) passes
+post-route timing at 317 MHz (WNS `+0.095 ns`) and the post-route functional
+golden test, with P3F power; see
+[trn16-nbits16-cin3-cout12-4d76f4fa.md](trn16-nbits16-cin3-cout12-4d76f4fa.md).
+
 The corrected WPN16/NBITS=16 campaign for 8, 16, and 32 MACs is summarized in
 [wpn16-8-16-32-nbits16-ae16c90e.md](wpn16-8-16-32-nbits16-ae16c90e.md).
 All three variants now pass post-route functional golden simulation and have
