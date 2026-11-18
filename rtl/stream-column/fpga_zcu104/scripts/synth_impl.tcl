@@ -13,18 +13,39 @@ if {[info exists ::env(STREAM_COLUMN_NBITS)]} {
 if {![string is integer -strict $nbits] || $nbits < 1} {
   error "STREAM_COLUMN_NBITS must be a positive integer, got '$nbits'"
 }
+# The campaigns use the ZCU104 part; STREAM_COLUMN_FPGA_PART targets another
+# device (e.g. xck26-sfvc784-2LV-c for the Kria K26). The constraints only
+# define the clock, so they do not depend on the board.
+set part xczu7ev-ffvc1156-2-e
+if {[info exists ::env(STREAM_COLUMN_FPGA_PART)] && $::env(STREAM_COLUMN_FPGA_PART) ne ""} {
+  set part $::env(STREAM_COLUMN_FPGA_PART)
+}
 set run_dir [file join $output_root $algorithm]
 file mkdir $run_dir
 
+# "#@generic NAME=VALUE" lines in the manifest add or override top-level
+# generics (e.g. N_CHANNEL_OUT=12 and NADDR=14 for the Cin3/Cout12 cores).
+array set generic_value [list NADDR 12 NBITS $nbits]
+set generic_order [list NADDR NBITS]
+set sources [open $manifest r]
+while {[gets $sources line] >= 0} {
+  if {[regexp {^#@generic\s+([A-Za-z_][A-Za-z0-9_]*)=(\S+)} [string trim $line] -> gname gvalue]} {
+    if {![info exists generic_value($gname)]} { lappend generic_order $gname }
+    set generic_value($gname) $gvalue
+  }
+}
+close $sources
+set generics {}
+foreach gname $generic_order { lappend generics "$gname=$generic_value($gname)" }
+
 set fp [open [file join $run_dir metadata.txt] w]
 puts $fp "vivado_version=[version -short]"
-puts $fp "part=xczu7ev-ffvc1156-2-e"
+puts $fp "part=$part"
 puts $fp "top=Conv"
 puts $fp "algorithm=$algorithm"
 puts $fp "target_period_ns=3.154574"
 puts $fp "target_frequency_mhz=317"
-puts $fp "NADDR=12"
-puts $fp "NBITS=$nbits"
+puts $fp "generics=[join $generics { }]"
 puts $fp "manifest=$manifest"
 close $fp
 
@@ -39,7 +60,7 @@ while {[gets $sources line] >= 0} {
 close $sources
 
 read_xdc $constraints
-synth_design -top Conv -part xczu7ev-ffvc1156-2-e -generic [list NADDR=12 NBITS=$nbits]
+synth_design -top Conv -part $part -generic $generics
 write_checkpoint -force [file join $run_dir design_synth.dcp]
 opt_design
 place_design

@@ -6,11 +6,32 @@ constraints, launchers, reports, and result summaries live under
 `rtl/conv3x3/fpga_zcu104/` and `rtl/conv4x4/fpga_zcu104/`; this shared directory
 retains the common scripts and testbench.
 
-All variants use the same workload packages (`sim-032-3-3-normal-trunc`),
+The 2026 campaigns (TCN9, IFN9, TCN16, WPN16) use the same workload packages
+(`sim-032-3-3-normal-trunc`, Cin3/Cout3, now under `rtl/conv*/data/archive/`),
 Vivado 2023.2 flow, 317 MHz clock, XCZU7EV part, `NADDR=12`, and output checker.
-`NADDR=12` is the minimum width that covers each input/output memory and matches
-the official streaming-column regression. Keep `NADDR=12`; do not silently use
-the RTL's default `NADDR=16` in the FPGA comparison.
+`NADDR=12` is the minimum width that covers each Cin3/Cout3 input/output memory
+and matches the official streaming-column regression. Keep `NADDR=12` for those
+packs; do not silently use the RTL's default `NADDR=16` in the FPGA comparison.
+
+A manifest may carry its own settings as directive lines (comments for older
+scripts):
+
+| Directive | Effect |
+| --- | --- |
+| `#@nbits <n>` | datapath width, unless `STREAM_COLUMN_NBITS` is set |
+| `#@dataset <dir>` | workload pack under `data/<alg>/sim/` (or `data/archive/<alg>/sim/`), unless `STREAM_COLUMN_DATASET` is set |
+| `#@generic NAME=VALUE` | extra or overriding top-level generic for `synth_design` (default `NADDR=12 NBITS=<n>`) |
+
+The current Cin3/Cout12 cores need `N_CHANNEL_OUT=12` and `NADDR=14`; see
+`rtl/conv4x4/fpga_zcu104/manifests/trn16.rtl` and the TRN16 example in
+`rtl/conv4x4/fpga_zcu104/README.md`. Only the default implementation flow
+(`synth_impl.tcl`) reads `#@generic` and `STREAM_COLUMN_FPGA_PART` (default
+`xczu7ev-ffvc1156-2-e`); the exploratory `synth_impl_*.tcl` scripts keep the
+ZCU104 part and `NADDR=12` of the runs they produced.
+
+`scripts/check_rtl.sh <fpga-config-dir> <variant> <family> [data-algorithm]`
+runs the same testbench on the RTL in Xcelium with the manifest's settings, as a
+check before a Vivado run.
 
 The runner also supports an explicit datapath-width override through
 `STREAM_COLUMN_NBITS` (default 20) and a workload-directory override through
@@ -43,6 +64,12 @@ and truncated canonical workload. Each result had zero final-output mismatches:
 | `wpn16` | 6x6 -> 4x4 | 8 | 8,843 | 2,304 | 9,216 |
 
 These are RTL functional checks only, not FPGA implementation or power results.
+
+On 2026-11-18, `scripts/check_rtl.sh` (Xcelium 23.03, RTL) reproduced `wpn16` at
+16 bits with the archived `sim-032-3-3-normal-trunc-nbits16` pack (2,304 write
+beats, 8,843 active cycles, zero mismatches) and checked `trn16` with its
+Cin3/Cout12 pack (9,216 write beats, 10,800 output words, 35,357 active cycles,
+zero mismatches).
 
 ## Paxos execution
 

@@ -1,0 +1,11 @@
+# TRN16 (ternary F(4,3) x F(4,3), 8 MACs, round, frac0) at 16 bits with the
+# current Cin3/Cout12 workload: the RTL of the ASIC configuration
+# rtl/conv4x4/synthesis/conv-trn16-...-round-column-frac0-extra0-nbits16-cin3-cout12.
+# NADDR=14 covers the 12x32x32 output memory (the input memory has 5,700 words).
+#@nbits 16
+#@dataset sim-032-3-12-normal-trunc-frac0-extra0-round-nbits16
+#@generic N_CHANNEL_OUT=12
+#@generic NADDR=14
+rtl/conv4x4/mult-matrices/trn16/mult_matrices.sv
+rtl/multip/multip.sv
+rtl/conv4x4/conv-trn16-i60-h17-t16-o16-m08-stream16-prefetch24-rowconst8-round-column.sv

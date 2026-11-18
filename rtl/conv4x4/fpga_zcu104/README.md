@@ -6,6 +6,58 @@ cores. The implementation scripts and testbench are shared from
 `rtl/stream-column/fpga_zcu104/` to keep the FPGA methodology identical across
 the supported convolution sizes.
 
+## Current example: TRN16 (Cin3/Cout12, 16 bits)
+
+`trn16` is the starting point for taking a current core to an FPGA. Its
+manifest uses the RTL of the ASIC configuration
+`rtl/conv4x4/synthesis/conv-trn16-i60-h17-t16-o16-m08-stream16-prefetch24-rowconst8-round-column-frac0-extra0-nbits16-cin3-cout12`
+and carries its own width, workload, and generics as directives, so no
+environment overrides are needed:
+
+```text
+#@nbits 16
+#@dataset sim-032-3-12-normal-trunc-frac0-extra0-round-nbits16
+#@generic N_CHANNEL_OUT=12
+#@generic NADDR=14
+```
+
+1. RTL check, before spending a Vivado run (Xcelium, a few seconds):
+
+   ```bash
+   module load xcelium/2303        # cadence/xcelium/2303 on the Paxos
+   rtl/stream-column/fpga_zcu104/scripts/check_rtl.sh rtl/conv4x4/fpga_zcu104 trn16 4
+   ```
+
+   It must print `STREAM_COLUMN_POWER_PASS ... mismatches=0`. On 2026-11-18 it
+   gave 9,216 write beats, 10,800 output words, zero mismatches, and 35,357
+   active cycles. As a negative control, the same core against the WPN16 pack
+   (`check_rtl.sh rtl/conv4x4/fpga_zcu104 trn16 4 wpn16`) fails with 10,166
+   mismatches.
+2. Implementation, power, and post-route functional simulation on the Paxos
+   (Vivado 2023.2 + Xcelium 23.03, inside tmux):
+
+   ```bash
+   rtl/conv4x4/fpga_zcu104/scripts/run_campaign.sh /sim/tarsio/reports-trn16-<commit> trn16
+   ```
+
+   For another Zynq UltraScale+ device set the part, e.g. for the Kria K26
+   `STREAM_COLUMN_FPGA_PART=xck26-sfvc784-2LV-c`. The constraints only define
+   the 317 MHz clock (`constraints/zcu104_317mhz.xdc`), so they are board
+   independent; change the period there if the target clock differs.
+
+No Vivado result exists for `trn16` yet; the numbers above are RTL simulation.
+
+To add another current core, copy `manifests/trn16.rtl`, replace the RTL line
+by the core of its ASIC configuration (`rtl/conv4x4/synthesis/<config>/list-file.txt`,
+without `pack_data.sv`, which is only the simulation workload; `pack_param.sv` and
+`pack_data.sv` are added by the flow), take `#@generic` values from
+`top-parameters.txt`, size `NADDR` for the larger of the input
+(`$size(const_data)` in `pack_data.sv`) and output (`N_CHANNEL_OUT`x32x32) memories,
+and add the variant to the `case` at the end of
+`rtl/stream-column/fpga_zcu104/scripts/run_all.sh`.
+
+## Manifests
+
 Supported manifests:
 
 | ID | Algorithm/configuration | RTL source |
@@ -18,6 +70,13 @@ Supported manifests:
 | `wpn16_m32` | WPN16, 32 MACs | `conv-wpn16-i60-h41-t64-o16-m32-stream16-prefetch24-rowconst8-trunc-column.sv` |
 | `wpn16_pipe` | WPN16, 8 MACs, registered feature-transform boundary | `conv-wpn16-pipe-i60-h17-t16-o16-m08-stream16-prefetch24-rowconst8-trunc-column.sv` |
 | `wpn16_pipe_both` | WPN16, 8 MACs, registered feature- and weight-transform boundaries | same RTL, `PIPE_WEIGHT_TRANSFORM=1` |
+| `trn16` | TRN16 (ternary), 8 MACs, round, Cin3/Cout12 workload | `conv-trn16-i60-h17-t16-o16-m08-stream16-prefetch24-rowconst8-round-column.sv` |
+
+The TCN16 and `wpn16_pipe` RTL now lives in `rtl/conv4x4/archive/{tcn16,wpn16}/`
+and the Cin3/Cout3 workload packs (`sim-032-3-3-normal-trunc*`) in
+`rtl/conv4x4/data/archive/<alg>/sim/`; the manifests and `run_all.sh` point
+there (2026-11-18). To reproduce a recorded campaign bit for bit, use the
+commit written in its result file.
 
 The three TCN16 variants were functionally checked locally with the same
 generated `NBITS=16` truncated workload. Each produced 8,100 valid output

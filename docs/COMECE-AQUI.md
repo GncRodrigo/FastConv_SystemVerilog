@@ -129,11 +129,14 @@ Rode tudo na raiz do repositório, dentro do tmux.
   é `p_start`/`p_end`, uma porta de leitura da RAM de entrada e uma porta da RAM de saída. Não existe `rtl/control` nem
   `rtl/system`: o controlador antigo virou `rtl/conv3x3` (commit `79164f12`), e os wrappers `System` da arquitetura
   anterior (Control + Memory + `conv-mux`) estão em `contrib/rtl/system/` e `contrib/rtl/system-bus/`, só como histórico.
-- **Levar um núcleo para FPGA:** a lista de fontes é o `list-file.txt` da configuração ASIC (sem o `pack_data.sv`, que é
-  só a carga da simulação), e o topo e os parâmetros estão em `top-module.txt` e `top-parameters.txt`. O fluxo Vivado
-  existente é o da ZCU104 (`rtl/conv4x4/fpga_zcu104/`, com scripts e testbench compartilhados em
-  `rtl/stream-column/fpga_zcu104/`); para outra placa da família Zynq UltraScale+, troque a part e as constraints e crie
-  um manifest para o núcleo.
+- **Levar um núcleo para FPGA:** o exemplo atual é o trn16 Cin3/Cout12 em
+  `rtl/conv4x4/fpga_zcu104/` (seção "Current example" do README). O manifest `manifests/trn16.rtl` lista as fontes (as
+  do `list-file.txt` da configuração ASIC, sem o `pack_data.sv`, que é só a carga da simulação) e traz largura, carga e
+  generics (`N_CHANNEL_OUT=12`, `NADDR=14`, tirados do `top-parameters.txt`). Antes do Vivado, confira o RTL em segundos
+  com `rtl/stream-column/fpga_zcu104/scripts/check_rtl.sh rtl/conv4x4/fpga_zcu104 trn16 4` (Xcelium; tem que dar
+  `mismatches=0`). O fluxo completo (Vivado 2023.2 no Paxos) é `rtl/conv4x4/fpga_zcu104/scripts/run_campaign.sh <saída>
+  trn16`; para outra placa Zynq UltraScale+, como a Kria K26, defina `STREAM_COLUMN_FPGA_PART=xck26-sfvc784-2LV-c`. As
+  constraints só definem o relógio de 317 MHz, então não dependem da placa.
 
 ## 7. Como registrar um experimento
 
