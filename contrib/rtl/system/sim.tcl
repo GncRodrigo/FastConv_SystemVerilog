@@ -7,7 +7,7 @@ set GIT_ROOT [exec git rev-parse --show-toplevel]
 # if {[info exists ::env(DATA)]} {
 #     set DATA_SV $::env(DATA)
 # } else {
-#     set DATA_SV "${GIT_ROOT}/data/ifn9/data.sv"
+#     set DATA_SV "${GIT_ROOT}/rtl/conv3x3/data/ifn9/data.sv"
 # }
 # vlog -work work  -svinputport=relaxed $DATA_SV
 

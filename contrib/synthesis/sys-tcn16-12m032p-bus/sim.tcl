@@ -9,7 +9,7 @@ set GIT_ROOT [exec git rev-parse --show-toplevel]
 # if {[info exists ::env(DATA)]} {
 #     set DATA_SV $::env(DATA)
 # } else {
-#     set DATA_SV "${GIT_ROOT}/data/ifn9/data.sv"
+#     set DATA_SV "${GIT_ROOT}/rtl/conv3x3/data/ifn9/data.sv"
 # }
 # vlog -work work  -svinputport=relaxed $DATA_SV
 
@@ -38,8 +38,8 @@ while {[gets $fp line] >= 0} {
 }
 close $fp
 
-vlog -work work $define_flags -svinputport=relaxed ${GIT_ROOT}/rtl/system-bus/system.sv
-vlog -work work $define_flags -svinputport=relaxed ${GIT_ROOT}/rtl/system-bus/testbench.sv
+vlog -work work $define_flags -svinputport=relaxed ${GIT_ROOT}/contrib/rtl/system-bus/system.sv
+vlog -work work $define_flags -svinputport=relaxed ${GIT_ROOT}/contrib/rtl/system-bus/testbench.sv
 # to show FSM
 # vsim -voptargs=+acc -t ps -fsmdebug -coverage -debugDB work.tb
 vsim -voptargs=+acc -t ps work.tb

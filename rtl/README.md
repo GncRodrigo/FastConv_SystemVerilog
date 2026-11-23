@@ -4,8 +4,10 @@ Este documento descreve a arquitetura do controlador de convolucao FastConv e
 a transicao da implementacao convencional para as variantes streaming. A
 implementacao convencional usada como referencia esta em
 [`conv3x3/archive/conv.sv`](conv3x3/archive/conv.sv). As variantes streaming 3x3 ficam em
-[`conv3x3stream-if/`](conv3x3stream-if/) e
-[`conv3x3stream-tc/`](conv3x3stream-tc/).
+[`contrib/rtl/conv3x3stream-if/`](../contrib/rtl/conv3x3stream-if/) e
+[`contrib/rtl/conv3x3stream-tc/`](../contrib/rtl/conv3x3stream-tc/)
+(prototipos arquivados; os nucleos atuais sao os stream-column de `rtl/conv*/`, gerados por
+`rtl/stream-column/gen_stream_column.py`, com o controle dentro do proprio modulo `Conv`).
 
 O mesmo principio tambem aparece nas variantes 2x2 e 4x4. O foco deste
 documento e o controlador 3x3 porque ele contem os dois caminhos de
@@ -414,10 +416,10 @@ Os quatro pontos implementados podem ser compilados e simulados com os
 `Makefile`s locais:
 
 ```bash
-make -C rtl/conv3x3stream-if run-conv6mac
-make -C rtl/conv3x3stream-if run-conv12mac
-make -C rtl/conv3x3stream-if run-conv18mac
-make -C rtl/conv3x3stream-tc run-conv5mac
+make -C contrib/rtl/conv3x3stream-if run-conv6mac
+make -C contrib/rtl/conv3x3stream-if run-conv12mac
+make -C contrib/rtl/conv3x3stream-if run-conv18mac
+make -C contrib/rtl/conv3x3stream-tc run-conv5mac
 ```
 
 Cada testbench verifica as escritas contra o golden da mesma configuracao.

@@ -1,0 +1,10 @@
+host=paxos.inf.pucrs.br
+repo_root=/sim/tarsio.onofrio/fpga-trn16-4d76f4fa
+commit=4d76f4fac577e7bf5925ab6c9fd7e8774979f0f5
+vivado=vivado v2023.2 (64-bit)
+xrun=TOOL:	xrun(64)	23.03-s003
+implementation_flow=default
+part=xczu7ev-ffvc1156-2-e
+NBITS_override=none
+dataset_override=none
+variant=trn16 NBITS=16 dataset=sim-032-3-12-normal-trunc-frac0-extra0-round-nbits16 data=/sim/tarsio.onofrio/fpga-trn16-4d76f4fa/rtl/conv4x4/data/trn16/sim/sim-032-3-12-normal-trunc-frac0-extra0-round-nbits16/pack_data.sv

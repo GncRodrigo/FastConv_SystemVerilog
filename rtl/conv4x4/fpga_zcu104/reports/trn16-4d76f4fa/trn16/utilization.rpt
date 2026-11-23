@@ -1,0 +1,41 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
+| Date         : Wed Nov 18 18:46:27 2026
+| Host         : paxos.inf.pucrs.br running 64-bit Rocky Linux release 8.10 (Green Obsidian)
+| Command      : report_utilization -hierarchical -file /sim/tarsio.onofrio/fpga-reports/trn16-4d76f4fa/trn16/utilization.rpt
+| Design       : Conv
+| Device       : xczu7ev-ffvc1156-2-e
+| Speed File   : -2
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++-----------------------+--------------------+------------+------------+---------+------+------+--------+--------+------+------------+
+|        Instance       |       Module       | Total LUTs | Logic LUTs | LUTRAMs | SRLs |  FFs | RAMB36 | RAMB18 | URAM | DSP Blocks |
++-----------------------+--------------------+------------+------------+---------+------+------+--------+--------+------+------------+
+| Conv                  |              (top) |       5884 |       5884 |       0 |    0 | 2049 |      0 |      0 |    0 |          8 |
+|   (Conv)              |              (top) |       3474 |       3474 |       0 |    0 | 2049 |      0 |      0 |    0 |          0 |
+|   MAC_LANES[0].multip |   MultipWideWeight |          4 |          4 |       0 |    0 |    0 |      0 |      0 |    0 |          1 |
+|   MAC_LANES[1].multip | MultipWideWeight_0 |        137 |        137 |       0 |    0 |    0 |      0 |      0 |    0 |          1 |
+|   MAC_LANES[2].multip | MultipWideWeight_1 |          4 |          4 |       0 |    0 |    0 |      0 |      0 |    0 |          1 |
+|   MAC_LANES[3].multip | MultipWideWeight_2 |          2 |          2 |       0 |    0 |    0 |      0 |      0 |    0 |          1 |
+|   MAC_LANES[4].multip | MultipWideWeight_3 |        269 |        269 |       0 |    0 |    0 |      0 |      0 |    0 |          1 |
+|   MAC_LANES[5].multip | MultipWideWeight_4 |          0 |          0 |       0 |    0 |    0 |      0 |      0 |    0 |          1 |
+|   MAC_LANES[6].multip | MultipWideWeight_5 |        135 |        135 |       0 |    0 |    0 |      0 |      0 |    0 |          1 |
+|   MAC_LANES[7].multip | MultipWideWeight_6 |          4 |          4 |       0 |    0 |    0 |      0 |      0 |    0 |          1 |
+|   trf                 |          Transform |       1858 |       1858 |       0 |    0 |    0 |      0 |      0 |    0 |          0 |
+|     matrix_c0         |           MatrixC0 |       1075 |       1075 |       0 |    0 |    0 |      0 |      0 |    0 |          0 |
+|     matrix_c1         |           MatrixC1 |        784 |        784 |       0 |    0 |    0 |      0 |      0 |    0 |          0 |
++-----------------------+--------------------+------------+------------+---------+------+------+--------+--------+------+------------+
+* Note: The sum of lower-level cells may be larger than their parent cells total, due to cross-hierarchy LUT combining
+
+

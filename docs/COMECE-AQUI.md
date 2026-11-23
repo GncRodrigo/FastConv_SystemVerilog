@@ -35,7 +35,7 @@ Todo o fluxo é o mesmo para qualquer identidade:
 | `README.md` (raiz) | estrutura, quick start, de onde sai cada número do artigo |
 | `rtl/stream-column/README.md` | o controlador compartilhado e como o RTL é gerado |
 | `rtl/conv4x4/README.md` | os algoritmos e sufixos atuais (tabela de códigos) |
-| `rtl/conv4x4/data/trn16/README.md` e `data/bsh16/README.md` | dois experimentos completos, do jeito que um experimento novo deve ficar registrado |
+| `rtl/conv4x4/data/trn16/README.md` e `rtl/conv4x4/data/bsh16/README.md` | dois experimentos completos, do jeito que um experimento novo deve ficar registrado |
 | `docs/repository-organization.md` | onde cada coisa mora e as regras de proveniência |
 | `report/iscas2027/README.md` | o artigo bloco a bloco, ligado às evidências |
 | `rtl/conv2x2/doc/history.md` | o histórico longo do controlador (consulta, não leitura linear) |
@@ -123,6 +123,26 @@ Rode tudo na raiz do repositório, dentro do tmux.
   (`*.shm`, `*.db`, `*.sdf`, `fv/`) não entram no git.
 - **"Pasta existe" não quer dizer "resultado existe".** Confira o log e o `report/flow-status.csv`.
 - `make audit-layout` confere, sem mudar nada, se toda config aponta para arquivos que existem.
+- **O controle está dentro do `Conv`.** Nos núcleos atuais (stream-column), a máquina de estados, os endereços e a
+  sequência Hadamard/inversa ficam no próprio módulo `Conv` do `.sv` da configuração (ex.:
+  `rtl/conv4x4/conv-trn16-i60-h17-t16-o16-m08-stream16-prefetch24-rowconst8-subexpression-round-column.sv`). A interface
+  é `p_start`/`p_end`, uma porta de leitura da RAM de entrada e uma porta da RAM de saída. Não existe `rtl/control` nem
+  `rtl/system`: o controlador antigo virou `rtl/conv3x3` (commit `79164f12`), e os wrappers `System` da arquitetura
+  anterior (Control + Memory + `conv-mux`) estão em `contrib/rtl/system/` e `contrib/rtl/system-bus/`, só como histórico.
+- **Levar um núcleo para FPGA:** o exemplo atual é o trn16 Cin3/Cout12 em
+  `rtl/conv4x4/fpga_zcu104/` (seção "Current example" do README). O manifest `manifests/trn16.rtl` lista as fontes (as
+  do `list-file.txt` da configuração ASIC, sem o `pack_data.sv`, que é só a carga da simulação) e traz largura, carga e
+  generics (`N_CHANNEL_OUT=12`, `NADDR=14`, tirados do `top-parameters.txt`). Antes do Vivado, confira o RTL em segundos
+  com `rtl/stream-column/fpga_zcu104/scripts/check_rtl.sh rtl/conv4x4/fpga_zcu104 trn16 4` (Xcelium; tem que dar
+  `mismatches=0`). O fluxo completo (Vivado 2023.2 no Paxos) é `rtl/conv4x4/fpga_zcu104/scripts/run_campaign.sh <saída>
+  trn16`; para outra placa Zynq UltraScale+, como a Kria K26, defina `STREAM_COLUMN_FPGA_PART=xck26-sfvc784-2LV-c`. As
+  constraints só definem o relógio de 317 MHz, então não dependem da placa. Referência na ZCU104 (2026-11-18): 5.884 LUTs,
+  2.049 FFs, 8 DSPs, folga de +0,095 ns a 317 MHz, golden pós-roteamento sem divergências, 0,458 W de potência dinâmica
+  (`rtl/conv4x4/fpga_zcu104/results/trn16-nbits16-cin3-cout12-4d76f4fa.md`).
+- **Usar o trn16 num projeto Vivado próprio (Kria):** bastam três fontes, topo `Conv` e generics `NBITS=16
+  N_CHANNEL_OUT=12 NADDR=14`; a lista, a interface de memória e a testbench estão em "Using TRN16 in your own Vivado
+  project" no README de `rtl/conv4x4/fpga_zcu104/`. Atenção: sozinho como topo, o núcleo usa 261 pinos de I/O, o que pode
+  passar do que a Kria tem; lá ele precisa das memórias num wrapper (ou de síntese out-of-context só para área e timing).
 
 ## 7. Como registrar um experimento
 

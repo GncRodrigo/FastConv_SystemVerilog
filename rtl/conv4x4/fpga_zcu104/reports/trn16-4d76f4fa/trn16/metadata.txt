@@ -1,0 +1,8 @@
+vivado_version=2023.2
+part=xczu7ev-ffvc1156-2-e
+top=Conv
+algorithm=trn16
+target_period_ns=3.154574
+target_frequency_mhz=317
+generics=NADDR=14 NBITS=16 N_CHANNEL_OUT=12
+manifest=/sim/tarsio.onofrio/fpga-trn16-4d76f4fa/rtl/conv4x4/fpga_zcu104/manifests/trn16.rtl

@@ -14,6 +14,7 @@ the cost of losing provenance.
 | Consolidated comparisons | `report/` and `rtl/conv*/report/` | Generated tables only. `scripts/report.py` uses active synthesis trees by default; archived flows are opt-in. |
 | Retired RTL and historical runs | `rtl/conv*/archive/` (including paired archived synthesis/data) | Preserve the RTL/config/dataset relationship. Do not move only one side of a reproducible experiment. |
 | Temporary working material | `tmp/` | Preserve until owner and reproducibility role are known. It is not a default destination for final flow evidence. |
+| Legacy RTL of earlier architectures | `contrib/rtl/` (e.g. `system/`, `system-bus/`, `control-*`, `conv-mux/`) and `contrib/synthesis/` | Provenance only. Not part of the active flow; scripts there point to the current location of each source. |
 | Legacy root synthesis entry point | `synthesis/` | Compatibility templates/index only. New configurations and results go under `rtl/conv*/synthesis/`. |
 
 ## Configuration identity and dataset provenance

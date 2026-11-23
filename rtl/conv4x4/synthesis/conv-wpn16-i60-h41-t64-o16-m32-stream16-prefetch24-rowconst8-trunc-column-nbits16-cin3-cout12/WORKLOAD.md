@@ -1,6 +1,6 @@
 # ASIC workload: Cin=3, Cout=12
 
-Source configuration: `rtl/conv4x4/synthesis/conv-wpn16-i60-h41-t64-o16-m32-stream16-prefetch24-rowconst8-trunc-column-nbits16`.
+Source configuration: `rtl/conv4x4/archive/synthesis/conv-wpn16-i60-h41-t64-o16-m32-stream16-prefetch24-rowconst8-trunc-column-nbits16`.
 
 Workload package: `rtl/conv4x4/data/wpn16/sim/sim-032-3-12-normal-trunc-nbits16/pack_data.sv`.
 

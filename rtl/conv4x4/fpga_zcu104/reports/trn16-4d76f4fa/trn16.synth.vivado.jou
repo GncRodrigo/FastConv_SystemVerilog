@@ -1,0 +1,14 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:13:54 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Wed Nov 18 18:42:32 2026
+# Process ID: 392117
+# Current directory: /sim/tarsio.onofrio/fpga-trn16-4d76f4fa
+# Command line: vivado -mode batch -source /sim/tarsio.onofrio/fpga-trn16-4d76f4fa/rtl/stream-column/fpga_zcu104/scripts/synth_impl.tcl -log /sim/tarsio.onofrio/fpga-reports/trn16-4d76f4fa/trn16.synth.vivado.log -journal /sim/tarsio.onofrio/fpga-reports/trn16-4d76f4fa/trn16.synth.vivado.jou -tclargs /sim/tarsio.onofrio/fpga-trn16-4d76f4fa /sim/tarsio.onofrio/fpga-reports/trn16-4d76f4fa trn16 /sim/tarsio.onofrio/fpga-trn16-4d76f4fa/rtl/conv4x4/fpga_zcu104/manifests/trn16.rtl /sim/tarsio.onofrio/fpga-trn16-4d76f4fa/rtl/conv4x4/fpga_zcu104/constraints/zcu104_317mhz.xdc
+# Log file: /sim/tarsio.onofrio/fpga-reports/trn16-4d76f4fa/trn16.synth.vivado.log
+# Journal file: /sim/tarsio.onofrio/fpga-reports/trn16-4d76f4fa/trn16.synth.vivado.jou
+# Running On: paxos.inf.pucrs.br, OS: Linux, CPU Frequency: 3100.000 MHz, CPU Physical cores: 14, Host memory: 134319 MB
+#-----------------------------------------------------------
+source /sim/tarsio.onofrio/fpga-trn16-4d76f4fa/rtl/stream-column/fpga_zcu104/scripts/synth_impl.tcl
